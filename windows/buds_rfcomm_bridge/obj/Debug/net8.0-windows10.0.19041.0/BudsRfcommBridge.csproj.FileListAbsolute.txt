@@ -1,0 +1,17 @@
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.AssemblyInfoInputs.cache
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.AssemblyInfo.cs
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.csproj.CoreCompileInputs.cache
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\bin\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.exe
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\bin\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.deps.json
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\bin\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.runtimeconfig.json
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\bin\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.dll
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\bin\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.pdb
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\bin\Debug\net8.0-windows10.0.19041.0\Microsoft.Windows.SDK.NET.dll
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\bin\Debug\net8.0-windows10.0.19041.0\WinRT.Runtime.dll
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\BudsRfco.DE731E28.Up2Date
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.dll
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\refint\BudsRfcommBridge.dll
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.pdb
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\BudsRfcommBridge.genruntimeconfig.cache
+D:\Projects\buds-kontrol\buds_controller\windows\buds_rfcomm_bridge\obj\Debug\net8.0-windows10.0.19041.0\ref\BudsRfcommBridge.dll
