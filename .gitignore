@@ -43,3 +43,20 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# C# RFCOMM bridge outputs
+/windows/buds_rfcomm_bridge/bin/
+/windows/buds_rfcomm_bridge/obj/
+
+# .NET / Visual Studio local files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# Local debug captures and temporary exports
+screenshots/
+captures/
+*.trace
+*.etl
