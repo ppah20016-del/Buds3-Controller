@@ -66,11 +66,10 @@ jobs:
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0"><dict>
-            <key>method</key><string>development</string>
+            <key>method</key><string>ad-hoc</string>
             <key>compileBitcode</key><false/>
             <key>signingStyle</key><string>manual</string>
             <key>stripSwiftSymbols</key><true/>
-            <key>teamID</key><string></string>
           </dict></plist>
           EOF
           xcodebuild -exportArchive -archivePath "$PWD/build/Buds3Controller.xcarchive" -exportPath "$PWD/build/ipa" -exportOptionsPlist "$PWD/exportOptions.plist" 2>&1 | tee export.log
