@@ -9,16 +9,16 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - name: Show Xcode version
         run: xcodebuild -version
-      - name: Setup Flutter
+      - name: Setup Flutter (beta channel for Dart 3.11+)
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'
-          channel: 'stable'
+          channel: 'beta'
+          flutter-version: '3.27.0'
       - name: Flutter pub get
         run: |
           cd ios
