@@ -18,7 +18,6 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'beta'
-          flutter-version: '3.27.0'
       - name: Flutter pub get
         run: |
           cd ios
