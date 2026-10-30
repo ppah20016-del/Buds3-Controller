@@ -1,0 +1,65 @@
+name: Build iOS IPA
+
+  on:
+    workflow_dispatch:
+    push:
+      branches: [main]
+      paths:
+        - 'ios/**'
+        - '.github/workflows/build-ios.yml'
+
+  jobs:
+    build-ios:
+      runs-on: macos-latest
+      timeout-minutes: 30
+      steps:
+        - uses: actions/checkout@v4
+        - name: Select Xcode
+          run: sudo xcode-select -s /Applications/Xcode_15.4.app
+        - name: Discover project
+          id: proj
+          run: |
+            cd Buds3-Controller/ios
+            if ls *.xcworkspace 2>/dev/null; then
+              echo "workspace=$(ls *.xcworkspace | head -1)" >> $GITHUB_OUTPUT
+              echo "type=workspace" >> $GITHUB_OUTPUT
+            elif ls *.xcodeproj 2>/dev/null; then
+              echo "project=$(ls *.xcodeproj | head -1)" >> $GITHUB_OUTPUT
+              echo "type=project" >> $GITHUB_OUTPUT
+            else
+              echo "❌ No project found"; exit 1
+            fi
+        - name: Build & Archive (no codesign)
+          id: archive
+          run: |
+            cd Buds3-Controller/ios
+            if [[ "${{ steps.proj.outputs.type }}" == "workspace" ]]; then
+              XC=(-workspace "${{ steps.proj.outputs.workspace }}")
+            else
+              XC=(-project "${{ steps.proj.outputs.project }}")
+            fi
+            SCHEME=$(xcodebuild "${XC[@]}" -list 2>/dev/null | awk '/Schemes:/{f=1;next} /^$/{f=0} f{print $1}' | grep -v '^Pods' | head -1)
+            echo "scheme=$SCHEME" >> $GITHUB_OUTPUT
+            xcodebuild "${XC[@]}" -scheme "$SCHEME" -configuration Release -destination generic/platform=iOS -archivePath "$PWD/build/Buds3Controller.xcarchive"
+  archive CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE="" 2>&1 | tee build.log
+        - name: Export IPA
+          run: |
+            cd Buds3-Controller/ios
+            cat > exportOptions.plist <<'EOF'
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+            <plist version="1.0"><dict>
+              <key>method</key><string>development</string>
+              <key>compileBitcode</key><false/>
+              <key>signingStyle</key><string>manual</string>
+              <key>stripSwiftSymbols</key><true/>
+              <key>teamID</key><string></string>
+            </dict></plist>
+            EOF
+            xcodebuild -exportArchive -archivePath "$PWD/build/Buds3Controller.xcarchive" -exportPath "$PWD/build/ipa" -exportOptionsPlist
+  "$PWD/exportOptions.plist" 2>&1 | tee export.log
+        - uses: actions/upload-artifact@v4
+          with:
+            name: Buds3Controller-ipa
+            path: Buds3-Controller/ios/build/ipa/*.ipa
+            retention-days: 7
