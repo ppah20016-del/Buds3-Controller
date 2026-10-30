@@ -9,16 +9,28 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Show Xcode version
         run: xcodebuild -version
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+          channel: 'stable'
+      - name: Flutter pub get
+        run: |
+          cd ios
+          flutter pub get
+      - name: Flutter build ios (generates Generated.xcconfig)
+        run: |
+          cd ios
+          flutter build ios --release --no-codesign
       - name: Discover project
         id: proj
         run: |
           cd ios
-          # procura .xcworkspace (diretório) primeiro
           WORKSPACE=$(find . -maxdepth 2 -name "*.xcworkspace" -type d | head -1)
           if [[ -n "$WORKSPACE" ]]; then
             echo "workspace=$WORKSPACE" >> $GITHUB_OUTPUT
@@ -41,7 +53,6 @@ jobs:
           else
             XC=(-project "${{ steps.proj.outputs.project }}")
           fi
-          # lista schemes e pega o primeiro que não seja Pods
           SCHEME=$(xcodebuild "${XC[@]}" -list 2>/dev/null | awk '/Schemes:/{f=1;next} /^$/{f=0} f{print $1}' | grep -v '^Pods' | head -1)
           if [[ -z "$SCHEME" ]]; then
             echo "❌ Nenhum scheme encontrado"; exit 1
