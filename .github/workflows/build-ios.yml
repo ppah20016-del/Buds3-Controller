@@ -18,15 +18,35 @@ jobs:
         id: proj
         run: |
           cd ios
-          if ls *.xcworkspace 2>/dev/null; then
-            echo "workspace=$(ls *.xcworkspace | head -1)" >> $GITHUB_OUTPUT
+          # procura .xcworkspace (diretório) primeiro
+          WORKSPACE=$(find . -maxdepth 2 -name "*.xcworkspace" -type d | head -1)
+          if [[ -n "$WORKSPACE" ]]; then
+            echo "workspace=$WORKSPACE" >> $GITHUB_OUTPUT
             echo "type=workspace" >> $GITHUB_OUTPUT
-          elif ls *.xcodeproj 2>/dev/null; then
-            echo "project=$(ls *.xcodeproj | head -1)" >> $GITHUB_OUTPUT
-            echo "type=project" >> $GITHUB_OUTPUT
           else
-            echo "No project found"; exit 1
+            PROJECT=$(find . -maxdepth 2 -name "*.xcodeproj" -type d | head -1)
+            if [[ -n "$PROJECT" ]]; then
+              echo "project=$PROJECT" >> $GITHUB_OUTPUT
+              echo "type=project" >> $GITHUB_OUTPUT
+            else
+              echo "No project found"; exit 1
+            fi
           fi
+      - name: Detect scheme
+        id: scheme
+        run: |
+          cd ios
+          if [[ "${{ steps.proj.outputs.type }}" == "workspace" ]]; then
+            XC=(-workspace "${{ steps.proj.outputs.workspace }}")
+          else
+            XC=(-project "${{ steps.proj.outputs.project }}")
+          fi
+          # lista schemes e pega o primeiro que não seja Pods
+          SCHEME=$(xcodebuild "${XC[@]}" -list 2>/dev/null | awk '/Schemes:/{f=1;next} /^$/{f=0} f{print $1}' | grep -v '^Pods' | head -1)
+          if [[ -z "$SCHEME" ]]; then
+            echo "❌ Nenhum scheme encontrado"; exit 1
+          fi
+          echo "scheme=$SCHEME" >> $GITHUB_OUTPUT
       - name: Build & Archive
         id: archive
         run: |
@@ -36,8 +56,8 @@ jobs:
           else
             XC=(-project "${{ steps.proj.outputs.project }}")
           fi
-          SCHEME=$(xcodebuild "${XC[@]}" -list 2>/dev/null | awk '/Schemes:/{f=1;next} /^$/{f=0} f{print $1}' | grep -v '^Pods' | head -1)
-          echo "scheme=$SCHEME" >> $GITHUB_OUTPUT
+          SCHEME="${{ steps.scheme.outputs.scheme }}"
+          echo "Building scheme: $SCHEME"
           xcodebuild "${XC[@]}" -scheme "$SCHEME" -configuration Release -destination generic/platform=iOS -archivePath "$PWD/build/Buds3Controller.xcarchive" archive CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE="" 2>&1 | tee build.log
       - name: Export IPA
         run: |
