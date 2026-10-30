@@ -12,8 +12,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+      - name: Show Xcode version
+        run: xcodebuild -version
       - name: Discover project
         id: proj
         run: |
