@@ -43,20 +43,10 @@ jobs:
               echo "No project found"; exit 1
             fi
           fi
-      - name: Detect scheme
+      - name: Set scheme (Flutter app = Runner)
         id: scheme
         run: |
-          cd ios
-          if [[ "${{ steps.proj.outputs.type }}" == "workspace" ]]; then
-            XC=(-workspace "${{ steps.proj.outputs.workspace }}")
-          else
-            XC=(-project "${{ steps.proj.outputs.project }}")
-          fi
-          SCHEME=$(xcodebuild "${XC[@]}" -list 2>/dev/null | awk '/Schemes:/{f=1;next} /^$/{f=0} f{print $1}' | grep -v '^Pods' | head -1)
-          if [[ -z "$SCHEME" ]]; then
-            echo "❌ Nenhum scheme encontrado"; exit 1
-          fi
-          echo "scheme=$SCHEME" >> $GITHUB_OUTPUT
+          echo "scheme=Runner" >> $GITHUB_OUTPUT
       - name: Build & Archive
         id: archive
         run: |
